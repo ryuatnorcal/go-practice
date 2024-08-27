@@ -1,35 +1,18 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"strconv"
+
+	"example.com/bank_app/fileops" // when you import from custom package, import starts from go.mod's package name + folder name of your package
 )
 
 const accountBalanceFile = "balance.txt"
 const defaultValue = 1000
 
-func writeBalanceToFile(balance float64) {
-	balancedText := fmt.Sprintf("%.2f", balance)
-	// filename, byte, permission
-	os.WriteFile(accountBalanceFile, []byte(balancedText), 0644)
-}
-func readBalanceFromFile() (float64, error) {
-	file, err := os.ReadFile(accountBalanceFile)
-	if err != nil {
-		return defaultValue, errors.New("Failed to find file") // default value
-	}
-	balanceText := string(file)
-	balance, err := strconv.ParseFloat(balanceText, 64)
-	if err != nil {
-		return defaultValue, errors.New("Failed to parse file") // default value
-	}
-	return balance, nil
-}
 func main() {
 	var session bool = true
-	accountBalance, err := readBalanceFromFile()
+	// when you use custom package, use package name of your package as object
+	accountBalance, err := fileops.GetFloatFromFile(accountBalanceFile, defaultValue)
 	if err != nil {
 		fmt.Println("----- ERROR -----")
 		fmt.Println(err)
@@ -39,12 +22,7 @@ func main() {
 	}
 
 	for i := 0; session; i++ {
-		fmt.Println("Welcome to Go BANK!")
-		fmt.Println("What do you want to do? ")
-		fmt.Println("1. Check Balance")
-		fmt.Println("2. Deposit")
-		fmt.Println("3. Withdraw")
-		fmt.Println("4. Exit")
+		presentOptions()
 		var choice int
 
 		fmt.Print("Enter your choice: ")
@@ -64,7 +42,7 @@ func main() {
 				continue
 			}
 			accountBalance += depositAmount
-			writeBalanceToFile(accountBalance)
+			fileops.WriteFloatToFile(accountBalance, accountBalanceFile)
 			fmt.Printf("Your New Balance is: %.2f\n", accountBalance)
 		case 3:
 			fmt.Println("Withdraw")
@@ -80,7 +58,7 @@ func main() {
 				continue
 			}
 			accountBalance -= withdrawAmount
-			writeBalanceToFile(accountBalance)
+			fileops.WriteFloatToFile(accountBalance, accountBalanceFile)
 			fmt.Printf("Your New Balance is: %.2f\n", accountBalance)
 		default:
 			fmt.Println("Goodbye!")
