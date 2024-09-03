@@ -19,6 +19,9 @@ func (fm FileManager) ReadLines() ([]string, error) {
 		return nil, errors.New("Failed to open file")
 	}
 
+	// defer will run at the end
+	defer file.Close()
+
 	scanner := bufio.NewScanner(file)
 	var lines []string
 	// go allows you to use for loop like while
@@ -29,11 +32,11 @@ func (fm FileManager) ReadLines() ([]string, error) {
 	err = scanner.Err()
 	if err != nil {
 
-		file.Close()
+		// file.Close()
 		return nil, errors.New("Failed to load data")
 	}
 
-	file.Close()
+	// file.Close()
 	return lines, nil
 }
 
