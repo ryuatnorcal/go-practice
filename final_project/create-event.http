@@ -1,0 +1,10 @@
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+  "id": 122,
+  "title": "hello from api",
+  "description": "first test request from http-client plugin",
+  "location": "calgary",
+  "user_id": 0
+}
