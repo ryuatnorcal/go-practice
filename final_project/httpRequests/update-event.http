@@ -1,0 +1,7 @@
+PUT http://localhost:8080/events/1
+Content-Content-Type: application/json
+
+{
+  "id": 124,
+  "title": "updated title"
+}
