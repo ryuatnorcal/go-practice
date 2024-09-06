@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"example.com/final_project/models"
+	"example.com/final_project/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,12 +39,24 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
+	token := context.Request.Header.Get("Authorization")
+	if token == "" {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "No token provided"})
+		return
+	}
+	err := utils.VerifyToken(token)
+
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
 	var event models.Event
 	// bind json to struct
 	// automatically map the request body to the event structure
 	// make sure the request body is JSON and attributes are the same
 	// if the incoming event is missing, just kept blank
-	err := context.ShouldBindJSON(&event)
+	err = context.ShouldBindJSON(&event)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

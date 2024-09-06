@@ -1,10 +1,9 @@
 POST http://localhost:8080/events
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lb3dfMkBjYXQuY2EiLCJleHAiOjE3MjU1ODkzMTUsInVzZXJJZCI6MH0.FsFVlmEcVRBqPnZ6gvjMarXAmbSct3hrdipYWSu1JsQ
 
 {
-  "id": 124,
-  "title": "hello from api 2",
+  "title": "hello from api 1",
   "description": "first test request from http-client plugin",
-  "location": "calgary",
-  "user_id": 0
+  "location": "calgary"
 }
