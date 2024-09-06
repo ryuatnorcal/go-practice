@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"example.com/final_project/models"
-	"example.com/final_project/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,30 +38,18 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
-	token := context.Request.Header.Get("Authorization")
-	if token == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "No token provided"})
-		return
-	}
-	err := utils.VerifyToken(token)
-
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-		return
-	}
 
 	var event models.Event
 	// bind json to struct
 	// automatically map the request body to the event structure
 	// make sure the request body is JSON and attributes are the same
 	// if the incoming event is missing, just kept blank
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	event.ID = 123
-	event.UserId = 1
+	event.UserId = context.GetInt64("userId")
 	err = event.Save()
 
 	if err != nil {
@@ -81,10 +68,15 @@ func updateEvent(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	_, err = models.GetEventById(id)
+	event, err := models.GetEventById(id)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if event.UserId != context.GetInt64("userId") {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "You are not authorized to update this event"})
 		return
 	}
 	var updatedEvent models.Event
@@ -111,6 +103,10 @@ func deleteEvent(context *gin.Context) {
 	event, err := models.GetEventById(id)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if event.UserId != context.GetInt64("userId") {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "You are not authorized to delete this event"})
 		return
 	}
 	err = event.Delete()

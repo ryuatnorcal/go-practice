@@ -18,7 +18,7 @@ func GenerateToken(email string, userId int64) (string, error) {
 	return token.SignedString([]byte(SECRET_KEY))
 }
 
-func VerifyToken(token string) error {
+func VerifyToken(token string) (int64, error) {
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		// .() type checking
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
@@ -28,21 +28,22 @@ func VerifyToken(token string) error {
 		return []byte(SECRET_KEY), nil
 	})
 	if err != nil {
-		return errors.New("Could not parse token")
+		return 0, errors.New("Could not parse token")
 	}
 	if !parsedToken.Valid {
-		return errors.New("Invalid token")
+		return 0, errors.New("Invalid token")
 	}
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok {
-		return errors.New("Invalid token")
+		return 0, errors.New("Invalid token")
 	}
 	// email := claims["email"].(string)
-	// userId := claims["userId"].(int64)
+	// type conversion claims["email"].(string) to int64
+	userId := int64(claims["userId"].(float64))
 
 	if int64(claims["exp"].(float64)) < time.Now().Unix() {
-		return errors.New("Token expired")
+		return 0, errors.New("Token expired")
 	}
-	return nil
+	return userId, nil
 
 }

@@ -1,9 +1,9 @@
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lb3dfMkBjYXQuY2EiLCJleHAiOjE3MjU1ODkzMTUsInVzZXJJZCI6MH0.FsFVlmEcVRBqPnZ6gvjMarXAmbSct3hrdipYWSu1JsQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lb3cyQGNhdC5jYSIsImV4cCI6MTcyNTY0MzE2NCwidXNlcklkIjoyfQ.FydJSeTkTW_WdHLzBOJAQyrTZ2XaJEhcLuAR7Jqbj68
 
 {
-  "title": "hello from api 1",
+  "title": "meows event 2",
   "description": "first test request from http-client plugin",
   "location": "calgary"
 }

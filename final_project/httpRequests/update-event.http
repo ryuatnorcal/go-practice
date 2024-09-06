@@ -1,7 +1,8 @@
 PUT http://localhost:8080/events/1
 Content-Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lb3dfM0BjYXQuY2EiLCJleHAiOjE3MjU2NDE3MTQsInVzZXJJZCI6Mn0.LowAHkLVvapz5T9vFjXRZJo2YUruzfMnpx-im9WLOEA
 
 {
-  "id": 124,
-  "title": "updated title"
+  "id": 3,
+  "title": "meow2  title"
 }
